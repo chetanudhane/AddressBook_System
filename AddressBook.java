@@ -1,7 +1,6 @@
 package addressbooksystem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +15,7 @@ public class AddressBook implements AddressBookInterface {
 		boolean condition = true;
 		do {
 			System.out.println("\nChoose Which Operation You Want To Perform...");
-			System.out.println("1.addPersonDetails 2.editDetails 3.showDetails 4.Exit");
+			System.out.println("1.addPersonDetails 2.editDetails 3.showDetails 4.deleteDetails 5.Exit");
 			int operation = sc.nextInt();
 
 			switch (operation) {
@@ -30,6 +29,9 @@ public class AddressBook implements AddressBookInterface {
 				showDetails();
 				break;
 			case 4:
+				deleteDetails();
+				break;
+			case 5:
 				condition = false;
 				System.out.println("Exit...");
 				break;
@@ -71,9 +73,12 @@ public class AddressBook implements AddressBookInterface {
 
 	@Override
 	public void showDetails() {
-		Iterator<PersonDetails> iterator = contactList.iterator();
-		while (iterator.hasNext()) {
-			System.out.println(iterator.next());
+		if (contactList.size() > 0) {
+			for (PersonDetails iterator : contactList) {
+				System.out.println(iterator);
+			}
+		} else {
+			System.out.println("No Contact Found...");
 		}
 	}
 
@@ -131,6 +136,26 @@ public class AddressBook implements AddressBookInterface {
 					System.out.println("Contact Edited Successfully");
 				} else
 					System.out.println("Contact doesn't exist");
+			}
+		} else
+			System.out.println("ContactList Empty...");
+	}
+
+	@Override
+	public void deleteDetails() {
+
+		if (contactList.size() > 0) {
+			System.out.println("Enter the firstName of the contact which you want to delete ");
+			String delName = sc.next();
+			for (int i = 0; i < contactList.size(); i++) {
+				if (contactList.get(i).getFirstName().equals(delName)) {
+					PersonDetails contact = contactList.get(i);
+					contactList.remove(contact);
+					System.out.println("Contact deleted Successfully...");
+					break;
+				} else {
+					System.out.println("Contact not found.... ");
+				}
 			}
 		} else
 			System.out.println("ContactList Empty...");

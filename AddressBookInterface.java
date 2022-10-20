@@ -9,4 +9,6 @@ public interface AddressBookInterface {
 	public void selectOption();
 
 	public void editDetails();
+
+	public void deleteDetails();
 }
