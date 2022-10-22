@@ -11,4 +11,6 @@ public interface AddressBookInterface {
 	public void editDetails();
 
 	public void deleteDetails();
+
+	public void addAddressBooks();
 }

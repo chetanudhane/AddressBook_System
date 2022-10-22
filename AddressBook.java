@@ -1,13 +1,26 @@
 package addressbooksystem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class AddressBook implements AddressBookInterface {
 
-	List<PersonDetails> contactList = new ArrayList<PersonDetails>();
 	Scanner sc = new Scanner(System.in);
+	List<PersonDetails> contactList = new ArrayList<PersonDetails>();
+	Map<String, PersonDetails> addressBookList = new HashMap<String, PersonDetails>();
+
+	public static String addressBookName;
+
+	public static String getAddressBookName() {
+		return addressBookName;
+	}
+
+	public static void setAddressBookName(String addressBookName) {
+		AddressBook.addressBookName = addressBookName;
+	}
 
 	@Override
 	public void selectOption() {
@@ -15,23 +28,27 @@ public class AddressBook implements AddressBookInterface {
 		boolean condition = true;
 		do {
 			System.out.println("\nChoose Which Operation You Want To Perform...");
-			System.out.println("1.addPersonDetails 2.editDetails 3.showDetails 4.deleteDetails 5.Exit");
+			System.out
+					.println("1.addAddressBooks 2.addPersonDetails 3.editDetails 4.showDetails 5.deleteDetails 6.Exit");
 			int operation = sc.nextInt();
 
 			switch (operation) {
 			case 1:
-				addPersonDetails();
+				addAddressBooks();
 				break;
 			case 2:
-				editDetails();
+				addPersonDetails();
 				break;
 			case 3:
-				showDetails();
+				editDetails();
 				break;
 			case 4:
-				deleteDetails();
+				showDetails();
 				break;
 			case 5:
+				deleteDetails();
+				break;
+			case 6:
 				condition = false;
 				System.out.println("Exit...");
 				break;
@@ -42,6 +59,31 @@ public class AddressBook implements AddressBookInterface {
 			}
 		} while (condition);
 
+	}
+
+	@Override
+	public void addAddressBooks() {
+
+		PersonDetails personDetails = new PersonDetails();
+		System.out.println("Enter the AddressBook name you want to add ?");
+		AddressBook.setAddressBookName(sc.next());
+		String bookName = AddressBook.getAddressBookName();
+		if (addressBookList.containsKey(bookName)) {
+			System.out.println("Book with that name already exist");
+		} else {
+			addressBookList.put(bookName, personDetails);
+			System.out.println("\nCreated a AddressBook : " + bookName);
+		}
+	}
+
+	@Override
+	public void showDetails() {
+
+		if (addressBookList.isEmpty()) {
+			System.out.println("Address Book List Empty...");
+		} else {
+			System.out.println("Address Book Is : " + addressBookList.keySet() + "\nDetails Are : " + contactList);
+		}
 	}
 
 	@Override
@@ -69,17 +111,6 @@ public class AddressBook implements AddressBookInterface {
 		personDetails.setMobileNumber(sc.nextInt());
 
 		contactList.add(personDetails);
-	}
-
-	@Override
-	public void showDetails() {
-		if (contactList.size() > 0) {
-			for (PersonDetails iterator : contactList) {
-				System.out.println(iterator);
-			}
-		} else {
-			System.out.println("No Contact Found...");
-		}
 	}
 
 	@Override
