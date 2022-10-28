@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class AddressBookDirectory implements AddressBookDirectoryInterface {
 
-	private static final int MAIN_EXIT = 6;
+	private static final int MAIN_EXIT = 8;
 	public AddressBook addressBook;
 	Map<String, AddressBook> addressBookDirectory = new HashMap<String, AddressBook>();
 
