@@ -199,18 +199,53 @@ public class AddressBook implements AddressBookInterface {
 		}
 	}
 
-	@Override
-	public void sortAddressBook() {
-		List<PersonDetails> sortedContactList = contactList.values().stream().sorted(
-				(firstperson, secondperson) -> firstperson.getFirstName().compareTo(secondperson.getFirstName()))
-				.collect(Collectors.toList());
-
-		System.out.println("***Sorted Address Book " + AddressBook.getAddressBookName() + "***");
+	public void printSortedList(List<PersonDetails> sortedContactList) {
+		System.out.println("*** Sorted Address Book " + AddressBook.getAddressBookName() + "***");
 		Iterator<PersonDetails> iterator = sortedContactList.iterator();
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next());
 			System.out.println();
 		}
 		System.out.println("-----------------------------------------");
+	}
+
+	@Override
+	public void sortAddressBook() {
+		List<PersonDetails> sortedContactList;
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Bookw to be sorted in : ");
+		System.out.println("1. FirstName\n2. City\n3. State\n4. Zip Code");
+		int choice = scanner.nextInt();
+		switch (choice) {
+		case 1:
+			sortedContactList = contactList.values().stream().sorted(
+					(firstperson, secondperson) -> firstperson.getFirstName().compareTo(secondperson.getFirstName()))
+					.collect(Collectors.toList());
+			printSortedList(sortedContactList);
+			break;
+		case 2:
+			sortedContactList = contactList.values().stream()
+					.sorted((firstperson, secondperson) -> firstperson.getCity().compareTo(secondperson.getCity()))
+					.collect(Collectors.toList());
+			printSortedList(sortedContactList);
+			break;
+		case 3:
+			sortedContactList = contactList.values().stream()
+					.sorted((firstperson, secondperson) -> firstperson.getState().compareTo(secondperson.getState()))
+					.collect(Collectors.toList());
+			printSortedList(sortedContactList);
+			break;
+		case 4:
+			sortedContactList = contactList.values().stream()
+					.sorted((firstperson, secondperson) -> Long.valueOf(firstperson.getZipCode())
+							.compareTo(Long.valueOf(secondperson.getZipCode())))
+					.collect(Collectors.toList());
+			printSortedList(sortedContactList);
+			break;
+		default:
+			System.out.println("Kindly enter a valid input...");
+			break;
+		}
 	}
 }
