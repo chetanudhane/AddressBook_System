@@ -18,4 +18,8 @@ public interface AddressBookDirectoryInterface {
 	public void searchPersonByState();
 
 	public void displayPeopleByRegion(HashMap<String, ArrayList<PersonDetails>> listToDisplay);
+
+	public void countPeopleByCity();
+
+	public void countPeopleByState();
 }
