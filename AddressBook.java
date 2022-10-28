@@ -1,194 +1,177 @@
 package addressbooksystem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class AddressBook implements AddressBookInterface {
 
-	Scanner sc = new Scanner(System.in);
-	List<PersonDetails> contactList = new ArrayList<PersonDetails>();
-	Map<String, PersonDetails> addressBookList = new HashMap<String, PersonDetails>();
-
+	public static final int ADDRESS_BOOK_EXIT = 5;
+	Map<String, PersonDetails> contactList = new HashMap<String, PersonDetails>();
 	public static String addressBookName;
 
 	public static String getAddressBookName() {
 		return addressBookName;
 	}
 
-	public static void setAddressBookName(String addressBookName) {
+	public void setAddressBookName(String addressBookName) {
 		AddressBook.addressBookName = addressBookName;
 	}
 
 	@Override
-	public void selectOption() {
+	public void displayContents() {
+		System.out.println("----- Contents of the Address Book " + AddressBook.getAddressBookName() + " -----");
+		for (String eachContact : contactList.keySet()) {
+			PersonDetails person = contactList.get(eachContact);
+			System.out.println(person);
+		}
+		System.out.println("-----------------------------------------");
+	}
 
+	@Override
+	public void operation() {
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
 		boolean condition = true;
 		do {
-			System.out.println("\nChoose Which Operation You Want To Perform...");
-			System.out
-					.println("1.addAddressBooks 2.addPersonDetails 3.editDetails 4.showDetails 5.deleteDetails 6.Exit");
-			int operation = sc.nextInt();
+			System.out.println("\nSelect any option which you want to perform on selected AddressBook\n");
+			System.out.println("1. Add To Address Book\n2. Edit Existing Entry\n3. Display Address book\n"
+					+ "4. Delete Contact\n" + ADDRESS_BOOK_EXIT + ". Exit");
 
-			switch (operation) {
+			switch (scanner.nextInt()) {
 			case 1:
-				addAddressBooks();
+				addContact();
 				break;
 			case 2:
-				addPersonDetails();
+				editPerson();
 				break;
 			case 3:
-				editDetails();
+				displayContents();
 				break;
 			case 4:
-				showDetails();
+				deletePerson();
 				break;
-			case 5:
-				deleteDetails();
-				break;
-			case 6:
+			case ADDRESS_BOOK_EXIT:
 				condition = false;
-				System.out.println("Exit...");
+				System.out.println("Terminated and redirected to main menu...");
 				break;
 			default:
-				System.out.println("Enter Valid Operation Type...");
-				selectOption();
+				System.out.println("Kindly enter a valid input...");
+				operation();
 				break;
 			}
+
 		} while (condition);
-
 	}
 
 	@Override
-	public void addAddressBooks() {
+	public void addContact() {
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
 
-		PersonDetails personDetails = new PersonDetails();
-		System.out.println("Enter the AddressBook name you want to add ?");
-		AddressBook.setAddressBookName(sc.next());
-		String bookName = AddressBook.getAddressBookName();
-		if (addressBookList.containsKey(bookName)) {
-			System.out.println("Book with that name already exist");
+		PersonDetails contactPerson = new PersonDetails();
+
+		System.out.println("Enter First Name : ");
+		contactPerson.setFirstName(scanner.next());
+
+		System.out.println("Enter Last Name : ");
+		contactPerson.setLastName(scanner.next());
+
+		System.out.println("Enter ph.no : ");
+		contactPerson.setMobileNumber(scanner.nextLong());
+
+		System.out.println("Enter City : ");
+		contactPerson.setCity(scanner.next());
+
+		System.out.println("Enter State : ");
+		contactPerson.setState(scanner.next());
+
+		System.out.println("Enter Zipcode : ");
+		contactPerson.setZipCode(scanner.nextInt());
+
+		System.out.println("Enter EmailID : ");
+		contactPerson.setEmailId(scanner.next());
+
+		contactList.put(contactPerson.getFirstName(), contactPerson);
+	}
+
+	@Override
+	public void editPerson() {
+		PersonDetails person = new PersonDetails();
+
+		System.out.println("Enter the first name on which you would like to make changes : ");
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		String fname = scanner.next();
+		if (contactList.containsKey(fname)) {
+			person = contactList.get(fname);
+			System.out.println("\nSelect which one you want to update : ");
+			System.out.println(
+					"1. Firstname\n2. Last Name\n3. Phone Number\n4. Email\n5. City\n6. State\n7. ZipCode\n8. Back");
+			int choice = scanner.nextInt();
+
+			switch (choice) {
+			case 1:
+				System.out.println("Enter the correct First Name :");
+				person.setFirstName(scanner.next());
+				System.out.println("Updated!");
+				break;
+			case 2:
+				System.out.println("Enter the correct Last Name :");
+				person.setLastName(scanner.next());
+				System.out.println("Updated!");
+
+				break;
+			case 3:
+				System.out.println("Enter the correct Phone Number :");
+				person.setMobileNumber(scanner.nextLong());
+				System.out.println("Updated!");
+				break;
+			case 4:
+				System.out.println("Enter the correct Email Address :");
+				person.setEmailId(scanner.next());
+				System.out.println("Updated!");
+				break;
+			case 5:
+				System.out.println("Enter the correct City :");
+				person.setCity(scanner.next());
+				System.out.println("Updated!");
+				break;
+			case 6:
+				System.out.println("Enter the correct State :");
+				person.setState(scanner.next());
+				System.out.println("Updated!");
+				break;
+			case 7:
+				System.out.println("Enter the correct ZipCode :");
+				person.setZipCode(scanner.nextInt());
+				System.out.println("Updated!");
+				break;
+			case 8:
+				System.out.println("Edit Section got terminated");
+				operation();
+			default:
+				System.out.println("Kindly enter a valid input");
+				break;
+			}
+
 		} else {
-			addressBookList.put(bookName, personDetails);
-			System.out.println("\nCreated a AddressBook : " + bookName);
+			System.out.println("Contact not found...");
 		}
 	}
 
 	@Override
-	public void showDetails() {
+	public void deletePerson() {
+		System.out.println("Enter the first name of the person to be deleted");
+		@SuppressWarnings("resource")
+		Scanner scanner = new Scanner(System.in);
+		String firstName = scanner.next();
 
-		if (addressBookList.isEmpty()) {
-			System.out.println("Address Book List Empty...");
+		if (contactList.containsKey(firstName)) {
+			contactList.remove(firstName);
+			System.out.println("Done, contact removed!");
 		} else {
-			System.out.println("Address Book Is : " + addressBookList.keySet() + "\nDetails Are : " + contactList);
+			System.out.println("Contact not found...");
 		}
-	}
-
-	@Override
-	public void addPersonDetails() {
-		PersonDetails personDetails = new PersonDetails();
-		System.out.println("Enter First Name");
-		personDetails.setFirstName(sc.next());
-
-		System.out.println("Enter Last Name");
-		personDetails.setLastName(sc.next());
-
-		System.out.println("Enter City Name");
-		personDetails.setCity(sc.next());
-
-		System.out.println("Enter State Name");
-		personDetails.setState(sc.next());
-
-		System.out.println("Enter Zip-Code");
-		personDetails.setZipCode(sc.nextInt());
-
-		System.out.println("Enter Email Id");
-		personDetails.setEmailId(sc.next());
-
-		System.out.println("Enter Mobile Number");
-		personDetails.setMobileNumber(sc.nextInt());
-
-		contactList.add(personDetails);
-	}
-
-	@Override
-	public void editDetails() {
-
-		if (contactList.size() > 0) {
-			String newFirstName;
-			System.out.println("Enter First name of contact to edit it ");
-			newFirstName = sc.next();
-
-			for (int i = 0; i < contactList.size(); i++) {
-				if (contactList.get(i).getFirstName().equals(newFirstName)) {
-					System.out.println("\nSelect which one you want to update : ");
-					System.out.println("1.First Name 2.Last Name 3.city 4.State 5.Zip 6.Phone 7.Email 8.Exit");
-					int op = sc.nextInt();
-
-					switch (op) {
-					case 1:
-						System.out.println("Enter new first name");
-						contactList.get(i).setFirstName(sc.next());
-						break;
-					case 2:
-						System.out.println("Enter new last name");
-						contactList.get(i).setLastName(sc.next());
-						break;
-					case 3:
-						System.out.println("Enter new city");
-						contactList.get(i).setCity(sc.next());
-						break;
-					case 4:
-						System.out.println("Enter new state");
-						contactList.get(i).setState(sc.next());
-						break;
-					case 5:
-						System.out.println("Enter new zip");
-						contactList.get(i).setZipCode(sc.nextInt());
-						break;
-					case 6:
-						System.out.println("Enter new phone number");
-						contactList.get(i).setMobileNumber(sc.nextLong());
-						break;
-					case 7:
-						System.out.println("Enter new email");
-						contactList.get(i).setEmailId(sc.next());
-						break;
-					case 8:
-						System.out.println("Exit From Edit Mode...");
-						break;
-					default:
-						System.out.println("Invalid Entry");
-						editDetails();
-						break;
-					}
-					System.out.println("Contact Edited Successfully");
-				} else
-					System.out.println("Contact doesn't exist");
-			}
-		} else
-			System.out.println("ContactList Empty...");
-	}
-
-	@Override
-	public void deleteDetails() {
-
-		if (contactList.size() > 0) {
-			System.out.println("Enter the firstName of the contact which you want to delete ");
-			String delName = sc.next();
-			for (int i = 0; i < contactList.size(); i++) {
-				if (contactList.get(i).getFirstName().equals(delName)) {
-					PersonDetails contact = contactList.get(i);
-					contactList.remove(contact);
-					System.out.println("Contact deleted Successfully...");
-					break;
-				} else {
-					System.out.println("Contact not found.... ");
-				}
-			}
-		} else
-			System.out.println("ContactList Empty...");
 	}
 }
