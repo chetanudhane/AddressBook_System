@@ -1,5 +1,8 @@
 package addressbooksystem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public interface AddressBookDirectoryInterface {
 
 	public void operationDirectory();
@@ -14,4 +17,5 @@ public interface AddressBookDirectoryInterface {
 
 	public void searchPersonByState();
 
+	public void displayPeopleByRegion(HashMap<String, ArrayList<PersonDetails>> listToDisplay);
 }

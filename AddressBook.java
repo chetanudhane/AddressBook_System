@@ -10,6 +10,8 @@ public class AddressBook implements AddressBookInterface {
 	public static final int ADDRESS_BOOK_EXIT = 5;
 	Map<String, PersonDetails> contactList = new HashMap<String, PersonDetails>();
 	public static String addressBookName;
+	public static HashMap<String, ArrayList<PersonDetails>> personByCity;
+	public static HashMap<String, ArrayList<PersonDetails>> personByState;
 	boolean conditionForDuplicateCheck = false;
 
 	public static String getAddressBookName() {
