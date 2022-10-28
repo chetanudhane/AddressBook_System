@@ -10,4 +10,8 @@ public interface AddressBookDirectoryInterface {
 
 	public void displayDirectoryDetails();
 
+	public void searchPersonByCity();
+
+	public void searchPersonByState();
+
 }
