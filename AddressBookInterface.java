@@ -11,4 +11,7 @@ public interface AddressBookInterface {
 	public void editPerson();
 
 	public void deletePerson();
+
+	public void sortAddressBook();
+
 }
