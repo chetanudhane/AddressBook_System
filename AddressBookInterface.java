@@ -2,15 +2,13 @@ package addressbooksystem;
 
 public interface AddressBookInterface {
 
-	public void addPersonDetails();
+	public void operation();
 
-	public void showDetails();
+	public void addContact();
 
-	public void selectOption();
+	public void displayContents();
 
-	public void editDetails();
+	public void editPerson();
 
-	public void deleteDetails();
-
-	public void addAddressBooks();
+	public void deletePerson();
 }

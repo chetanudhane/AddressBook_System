@@ -4,8 +4,8 @@ public class AddressBookMain {
 
 	public static void main(String[] args) {
 
-		AddressBook addressBook = new AddressBook();
-		addressBook.selectOption();
+		AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
+		addressBookDirectory.operationDirectory();
 	}
 
 }
