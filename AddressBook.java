@@ -10,12 +10,16 @@ import java.util.stream.Collectors;
 
 public class AddressBook implements AddressBookInterface {
 
-	public static final int ADDRESS_BOOK_EXIT = 6;
+	public static final int ADDRESS_BOOK_EXIT = 8;
 	Map<String, PersonDetails> contactList = new HashMap<String, PersonDetails>();
 	public static String addressBookName;
 	public static HashMap<String, ArrayList<PersonDetails>> personByCity;
 	public static HashMap<String, ArrayList<PersonDetails>> personByState;
 	boolean conditionForDuplicateCheck = false;
+
+	public enum IOService {
+		CONSOLE_IO, FILE_IO
+	}
 
 	public static String getAddressBookName() {
 		return addressBookName;
@@ -47,7 +51,8 @@ public class AddressBook implements AddressBookInterface {
 		do {
 			System.out.println("\nSelect any option which you want to perform on selected AddressBook\n");
 			System.out.println("1. Add To Address Book\n2. Edit Existing Entry\n3. Display Address book\n"
-					+ "4. Delete Contact\n5. Sort the Address Book\n" + ADDRESS_BOOK_EXIT + ". Exit");
+					+ "4. Delete Contact\n5. Sort the Address Book\n6. Write To File\n7. Read From File\n"
+					+ ADDRESS_BOOK_EXIT + ". Exit");
 			switch (scanner.nextInt()) {
 			case 1:
 				addContact();
@@ -63,6 +68,13 @@ public class AddressBook implements AddressBookInterface {
 				break;
 			case 5:
 				sortAddressBook();
+				break;
+			case 6:
+				writeToAddressBookFile(IOService.FILE_IO);
+				System.out.println("Written To file");
+				break;
+			case 7:
+				readDataFromFile(IOService.FILE_IO);
 				break;
 			case ADDRESS_BOOK_EXIT:
 				condition = false;
@@ -237,9 +249,8 @@ public class AddressBook implements AddressBookInterface {
 			printSortedList(sortedContactList);
 			break;
 		case 4:
-			sortedContactList = contactList.values().stream()
-					.sorted((firstperson, secondperson) -> Long.valueOf(firstperson.getZipCode())
-							.compareTo(Long.valueOf(secondperson.getZipCode())))
+			sortedContactList = contactList.values().stream().sorted((firstperson, secondperson) -> Long
+					.valueOf(firstperson.getZipCode()).compareTo(Long.valueOf(secondperson.getZipCode())))
 					.collect(Collectors.toList());
 			printSortedList(sortedContactList);
 			break;
@@ -247,5 +258,52 @@ public class AddressBook implements AddressBookInterface {
 			System.out.println("Kindly enter a valid input...");
 			break;
 		}
+
 	}
+
+	@Override
+	public void writeToAddressBookFile(IOService ioService) {
+		if (ioService.equals(IOService.CONSOLE_IO))
+			displayContents();
+
+		else if (ioService.equals(IOService.FILE_IO)) {
+			String bookName = AddressBook.getAddressBookName();
+			String fileName = bookName + ".txt";
+			new AddressBookFileIO().writeToAddressBookFile(fileName, contactList);
+		}
+	}
+
+	@Override
+	public void printData(IOService fileIo) {
+		String bookName = AddressBook.getAddressBookName();
+		String fileName = bookName + ".txt";
+		if (fileIo.equals(IOService.FILE_IO))
+			new AddressBookFileIO().printData(fileName);
+	}
+
+	@Override
+	public long countEntries(IOService fileIo) {
+
+		String bookName = AddressBook.getAddressBookName();
+		String fileName = bookName + ".txt";
+		if (fileIo.equals(IOService.FILE_IO))
+			return new AddressBookFileIO().countEntries(fileName);
+
+		return 0;
+	}
+
+	@Override
+	public List<String> readDataFromFile(IOService fileIo) {
+
+		List<String> detailsFile = new ArrayList<String>();
+		if (fileIo.equals(IOService.FILE_IO)) {
+			System.out.println("Contacts from file are : ");
+			String bookName = AddressBook.getAddressBookName();
+			String fileName = bookName + ".txt";
+			detailsFile = new AddressBookFileIO().readDataFromFile(fileName);
+
+		}
+		return detailsFile;
+	}
+
 }
