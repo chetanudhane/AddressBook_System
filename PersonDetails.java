@@ -1,14 +1,23 @@
 package addressbooksystem;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class PersonDetails {
 
+	@CsvBindByName(column = "First Name")
 	private String firstName;
+	@CsvBindByName(column = "Last Name")
 	private String lastName;
-	private String city;
-	private String state;
-	private int zipCode;
-	private long mobileNumber;
-	private String emailId;
+	@CsvBindByName(column = "email")
+	private String email;
+	@CsvBindByName(column = "phoneNumber")
+	private long phoneNumber;
+	@CsvBindByName(column = "city")
+	private String city; 
+	@CsvBindByName(column = "state")
+	private String state; 
+	@CsvBindByName(column = "zip")
+	private long zip;
 
 	public PersonDetails() {
 		super();
