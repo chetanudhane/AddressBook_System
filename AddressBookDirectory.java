@@ -1,15 +1,14 @@
-package addressbooksystem;
+package com.bridgelabz;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class AddressBookDirectory implements AddressBookDirectoryInterface {
-
+public class AddressBookDirectory implements AddressBookDirectoryInterface{
 	private static final int MAIN_EXIT = 10;
 	public AddressBook addressBook;
-	Map<String, AddressBook> addressBookDirectory = new HashMap<String, AddressBook>();
+	Map<String,AddressBook> addressBookDirectory = new HashMap<String,AddressBook>();
 
 	@Override
 	public void operationDirectory() {
@@ -17,11 +16,12 @@ public class AddressBookDirectory implements AddressBookDirectoryInterface {
 		Scanner scanner = new Scanner(System.in);
 		boolean condition = true;
 		do {
-			System.out.println("\nSelect any option : \n\n1. Add AddressBook" + "\n2. Edit Existing Addressbook"
-					+ "\n3. Search Person by City\n4. Search Person by State\n5. Display Addressbook"
-					+ "\n6. View by City\n7. View by State\n8. Count by City\n9. Count by State" + "\n" + MAIN_EXIT
-					+ ". Exit");
-			switch (scanner.nextInt()) {
+			System.out.println("\nSelect any option : \n\n1. Add AddressBook"
+					+ "\n2. Edit Existing Addressbook"
+					+"\n3. Search Person by City\n4. Search Person by State\n5. Display Addressbook"
+					+"\n6. View by City\n7. View by State\n8. Count by City\n9. Count by State"
+					+ "\n"+MAIN_EXIT+". Exit");
+			switch(scanner.nextInt()) {
 			case 1:
 				addAddressBook();
 				break;
@@ -53,9 +53,10 @@ public class AddressBookDirectory implements AddressBookDirectoryInterface {
 				System.out.println("Terminated....");
 				break;
 			default:
+				System.out.println("Kindly enter a valid input");
 				break;
 			}
-		} while (condition);
+		}while(condition);
 	}
 
 	@Override
@@ -65,12 +66,12 @@ public class AddressBookDirectory implements AddressBookDirectoryInterface {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the AddressBook name you want to add ?");
 		String bookName = scanner.next();
-		if (addressBookDirectory.containsKey(bookName)) {
+		if(addressBookDirectory.containsKey(bookName)) {
 			System.out.println("Book with that name already exist");
-		} else {
+		}else {
 			addressBook.setAddressBookName(bookName);
 			addressBookDirectory.put(bookName, addressBook);
-			System.out.println("\nCreated a AddressBook : " + bookName);
+			System.out.println("\nCreated a AddressBook : "+bookName);
 		}
 	}
 
@@ -80,10 +81,10 @@ public class AddressBookDirectory implements AddressBookDirectoryInterface {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the AddressBook name on which you want to add the details");
 		String bookName = scanner.next();
-		if (addressBookDirectory.containsKey(bookName)) {
+		if(addressBookDirectory.containsKey(bookName)) {
 			addressBook = addressBookDirectory.get(bookName);
 			addressBook.operation();
-		} else
+		}else
 			System.out.println("Book with that name doesn't exist..");
 	}
 
@@ -104,86 +105,89 @@ public class AddressBookDirectory implements AddressBookDirectoryInterface {
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Enter city name to search a person");
 			String cityName = scanner.next();
+			System.out.println("Name of the Person : ");
+			String personName = scanner.next();
 
-			for (AddressBook addressBook : addressBookDirectory.values()) {
-				ArrayList<PersonDetails> contactList = addressBook.getContact();
-				contactList.stream().filter(p -> p.getCity().equals(cityName))
-						.forEach(contact -> System.out.println(contact));
+			for(AddressBook addressBook : addressBookDirectory.values()) {
+				ArrayList<ContactPerson> contactList = addressBook.getContact();
+				contactList.stream()
+				.filter(p -> p.getFirstName().equals(personName) && p.getCity().equals(cityName))
+				.forEach(contact -> System.out.println(contact));
 			}
 			System.out.println("end of list...");
-		} else {
+		}else {
 			System.out.println("No contacts as of now");
 		}
-	}
+	}	
 
 	@Override
-	public void searchPersonByState() {
+	public void searchPersonByState(){
 		if (!addressBookDirectory.isEmpty()) {
 			@SuppressWarnings("resource")
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Enter state name to search a person");
 			String stateName = scanner.next();
-			for (AddressBook addressBook : addressBookDirectory.values()) {
-				ArrayList<PersonDetails> contactList = ((AddressBook) addressBook).getContact();
-				contactList.stream().filter(p -> p.getState().equals(stateName))
-						.forEach(contact -> System.out.println(contact));
+			System.out.println("Enter the name of the Person : ");
+			String personName = scanner.next();
+			for(AddressBook addressBook : addressBookDirectory.values()) {
+				ArrayList<ContactPerson> contactList = ((AddressBook) addressBook).getContact();
+				contactList.stream().filter(p -> p.getFirstName().equals(personName) && p
+						.getState().equals(stateName))
+				.forEach(contact -> System.out.println(contact));		
 			}
 			System.out.println("end of list...");
-		} else {
+		}else {
 			System.out.println("No contacts as of now");
 		}
 	}
 
 	@Override
-	public void displayPeopleByRegion(HashMap<String, ArrayList<PersonDetails>> listToDisplay) {
-
-		ArrayList<PersonDetails> list;
+	public void displayPeopleByRegion(HashMap<String, ArrayList<ContactPerson>> listToDisplay) {
+		ArrayList<ContactPerson> list;
 		for (String name : listToDisplay.keySet()) {
 			System.out.println("Contacts in : " + name);
 			list = listToDisplay.get(name);
-			for (PersonDetails contact : list) {
+			for (ContactPerson contact : list) {
 				System.out.println(contact);
 			}
-		}
-
+		}		
 	}
 
 	@Override
 	public void countPeopleByCity() {
-		ArrayList<PersonDetails> contactList = null;
+		ArrayList<ContactPerson> contactList = null ;
 		if (!addressBookDirectory.isEmpty()) {
 			@SuppressWarnings("resource")
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Enter City Name : ");
 			String city = scanner.next();
 
-			for (AddressBook addressBook : addressBookDirectory.values()) {
+			for(AddressBook addressBook : addressBookDirectory.values()) {
 				contactList = addressBook.getContact();
-				System.out.println(contactList.stream().filter(p -> p.getCity().equals(city)).count());
+				System.out.println(contactList.stream()
+						.filter(p -> p.getCity().equals(city)).count());
 
 			}
-		} else
+		}else
 			System.out.println("empty as of now....");
-
 	}
 
 	@Override
 	public void countPeopleByState() {
-		ArrayList<PersonDetails> contactList = null;
+		ArrayList<ContactPerson> contactList = null ;
 		if (!addressBookDirectory.isEmpty()) {
 			@SuppressWarnings("resource")
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Enter State Name : ");
 			String state = scanner.next();
 
-			for (AddressBook addressBook : addressBookDirectory.values()) {
+			for(AddressBook addressBook : addressBookDirectory.values()) {
 				contactList = addressBook.getContact();
-				System.out.println(contactList.stream().filter(p -> p.getState().equals(state)).count());
+				System.out.println(contactList.stream()
+						.filter(p -> p.getState().equals(state)).count()); 
 
 			}
-		} else
+		}else
 			System.out.println("empty as of now....");
-
 	}
-
 }
