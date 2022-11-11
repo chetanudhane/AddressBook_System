@@ -1,4 +1,4 @@
-package addressbooksystem;
+package com.bridgelabz;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AddressBookFileIO {
-
-	public void writeToAddressBookFile(String fileName, Map<String, PersonDetails> contactList) {
+	public void writeToAddressBookFile(String fileName, Map<String, ContactPerson> contactList) {
 
 		StringBuffer addressBookBuffer = new StringBuffer();
 		contactList.values().stream().forEach(contact -> {
@@ -20,7 +19,8 @@ public class AddressBookFileIO {
 
 		try {
 			Files.write(Paths.get(fileName), addressBookBuffer.toString().getBytes());
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			System.out.println(e);
 		}
 	}
@@ -29,7 +29,8 @@ public class AddressBookFileIO {
 
 		try {
 			Files.lines(new File(fileName).toPath()).forEach(System.out::println);
-		} catch (IOException e) {
+		}
+		catch(IOException e) {			
 			System.out.println(e);
 		}
 
@@ -37,10 +38,11 @@ public class AddressBookFileIO {
 
 	public long countEntries(String fileName) {
 
-		long entries = 0;
+		long entries=0;
 		try {
 			entries = Files.lines(new File(fileName).toPath()).count();
-		} catch (IOException e) {
+		}
+		catch(IOException e) {
 			System.out.println(e);
 		}
 		return entries;
@@ -50,14 +52,17 @@ public class AddressBookFileIO {
 
 		List<String> addressBookList = new ArrayList<String>();
 
-		System.out.println("Reading from : " + fileName + "\n");
+		System.out.println("Reading from : "+fileName+"\n");
 		try {
-			Files.lines(new File(fileName).toPath()).map(line -> line.trim()).forEach(p -> {
+			Files.lines(new File(fileName).toPath())
+			.map(line -> line.trim())
+			.forEach(p -> {
 				System.out.println(p);
 				addressBookList.add(p);
 			});
 
-		} catch (IOException e) {
+		}
+		catch(IOException e){
 			System.out.println(e);
 		}
 		return addressBookList;
